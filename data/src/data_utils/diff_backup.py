@@ -8,7 +8,9 @@ from classes.backup_archive_database import (
 from classes.diff_report import DiffReport
 from classes.featurelayer import google_cloud_bucket
 from config.psql import conn, local_engine
-from sqlalchemy import inspect
+from sqlalchemy import inspect, MetaData, Table, Column, Integer
+
+from data.src.classes.diff_report import DiffTable
 
 
 class TestDiffBackup:
@@ -79,7 +81,7 @@ class TestDiffBackup:
         diff.email_report()
 
     def test_is_backup_schema_exists(self):
-        """test method for whether the backup schema exists """    
+        """test method for whether the backup schema exists"""
         if TestDiffBackup.backup.is_backup_schema_exists():
             TestDiffBackup.backup.archive_backup_schema()
             conn.commit()
@@ -91,8 +93,6 @@ class TestDiffBackup:
             conn.commit()
             assert not TestDiffBackup.backup.is_backup_schema_exists()
 
-    
     def test_backup_tiles_file(self):
-        """ test backing up the tiles file """
+        """test backing up the tiles file"""
         TestDiffBackup.backup.backup_tiles_file()
-
