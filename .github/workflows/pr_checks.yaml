@@ -28,7 +28,7 @@ jobs:
           POSTGRES_PASSWORD: "some-secure-password"
           POSTGRES_DB: test_db
         ports:
-          - 5433:5432
+          - 5433:5433
         # Set health checks to wait until postgres is ready
         options: >-
           --health-cmd pg_isready
