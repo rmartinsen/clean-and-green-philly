@@ -9,8 +9,6 @@ on:
   pull_request:
     branches:
       - staging
-    paths:
-      - 'data/**'
   workflow_dispatch:  # Allows manual trigger
 
 jobs:
