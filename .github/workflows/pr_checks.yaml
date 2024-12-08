@@ -29,7 +29,18 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          
+
+      - name: Build Postgres container
+        run: docker compose build postgres
+        working-directory: data
+        
+      - name: Start Postgres
+        run: |
+          docker compose up postgres -d
+          # Wait for postgres to be ready
+          sleep 10
+        working-directory: data 
+        
       - name: Install and configure pipenv
         run: |
           python -m pip install --upgrade pip
