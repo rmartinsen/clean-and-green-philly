@@ -19,7 +19,7 @@ jobs:
         working-directory: data/src
     env:
       POSTGRES_PASSWORD: "some-secure-password"
-      VACANT_LOTS_DB": "postgresql://postgres::${POSTGRES_PASSWORD}@localhost:5433/vacantlotdb"
+      VACANT_LOTS_DB: "postgresql://postgres::${POSTGRES_PASSWORD}@localhost:5433/vacantlotdb"
     
     steps:
       - name: Checkout repository
