@@ -12,6 +12,31 @@ on:
   workflow_dispatch:  # Allows manual trigger
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: data/src
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pip
+          pip install pipenv
+
+      - name: Install dependencies
+        run: pipenv install --dev
+
+      - name: Run pytest
+        run: pipenv run pytest
   lint:
     runs-on: ubuntu-latest
 
