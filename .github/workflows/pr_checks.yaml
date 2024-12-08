@@ -3,7 +3,10 @@ name: PR Checks
 on:
   push:
     branches:
-      - staging
+     - staging
+    paths:
+      - 'data/**'
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   lint:
