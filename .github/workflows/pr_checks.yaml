@@ -52,7 +52,7 @@ jobs:
           echo "Using Python: $(which python)"
           pipenv --python $(which python) install --dev
 
-      - run: pipenv run pytest
+      - run: PYTHONPATH=$PYTHONPATH:. pipenv run pytest
   lint:
     runs-on: ubuntu-latest
 
