@@ -19,7 +19,7 @@ jobs:
         working-directory: data/src
     env:
       POSTGRES_PASSWORD: "some-secure-password"
-      VACANT_LOTS_DB: "postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5433/vacantlotdb"
+      VACANT_LOTS_DB: "postgresql://postgres:some-secure-password@localhost:5433/vacantlotdb"
     services:
       postgres:
         image: postgis/postgis:16-3.4
