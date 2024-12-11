@@ -116,3 +116,27 @@ jobs:
       - name: Formatter and linter success
         if: success()
         run: echo "Formatting and linting passed successfully."
+
+  test:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: data/src
+      env:
+        POSTGRES_PASSWORD: "some-secure-password"
+        VACANT_LOTS_DB: "postgresql://postgres:some-secure-password@localhost:5433/vacantlotdb"
+      services:
+        postgres:
+          image: postgis/postgis:16-3.4
+          env:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: "some-secure-password"
+            POSTGRES_DB: vacantlotdb
+          ports:
+            - 5433:5432
+          # Set health checks to wait until postgres is ready
+          options: >-
+            --health-cmd pg_isready
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5

@@ -3,6 +3,8 @@ import zipfile
 from io import BytesIO
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 import geopandas as gpd
 from config.config import USE_CRS
 from data_utils.park_priority import get_latest_shapefile_url, park_priority
@@ -10,6 +12,16 @@ from data_utils.ppr_properties import ppr_properties
 from data_utils.vacant_properties import vacant_properties
 from shapely.geometry import Point
 
+from google.cloud.storage import Bucket
+
+
+@pytest.fixture(autouse=True)
+def mock_gcp_bucket(monkeypatch):
+    mock_bucket = MagicMock(spec=Bucket)
+
+    monkeypatch.setattr('classes.featurelayer.google_cloud_bucket', lambda: mock_bucket)
+
+    return mock_bucket
 
 class TestDataUtils(unittest.TestCase):
     """
