@@ -75,6 +75,7 @@ jobs:
         run: pipenv run pip install .
 
       - name: Run Pytest
+        working-directory: data/src
         run: PYTHONPATH=$PYTHONPATH:. pipenv run pytest
 
   # run-formatter:
