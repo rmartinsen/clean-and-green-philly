@@ -70,6 +70,10 @@ jobs:
           echo "Using Python: $(which python)"
           pipenv --python $(which python) install --dev
 
+      - name: Install 
+        working-directory: cd /usr/src/app/awkde
+        run: pipenv run pip install .
+
       - name: Run Pytest
         run: PYTHONPATH=$PYTHONPATH:. pipenv run pytest
 
