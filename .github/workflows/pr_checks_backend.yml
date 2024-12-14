@@ -71,7 +71,7 @@ jobs:
           pipenv --python $(which python) install --dev
 
       - name: Install awkde
-        working-directory: /usr/src/app/awkde
+        working-directory: data/src/awkde
         run: pipenv run pip install .
 
       - name: Run Pytest
