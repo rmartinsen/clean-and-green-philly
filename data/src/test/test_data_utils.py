@@ -1,7 +1,7 @@
 import unittest
 import zipfile
 from io import BytesIO
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, Mock
 
 import pytest
 
@@ -14,6 +14,7 @@ from shapely.geometry import Point
 
 from google.cloud.storage import Bucket
 
+from data_utils.vacant_properties import google_cloud_bucket
 
 @pytest.fixture(autouse=True)
 def mock_gcp_bucket(monkeypatch):
@@ -22,6 +23,7 @@ def mock_gcp_bucket(monkeypatch):
     monkeypatch.setattr('classes.featurelayer.google_cloud_bucket', lambda: mock_bucket)
 
     return mock_bucket
+
 
 class TestDataUtils(unittest.TestCase):
     """
@@ -129,16 +131,69 @@ class TestDataUtils(unittest.TestCase):
 
         self.assertEqual(result, mock_primary_layer)
 
-    def test_ppr_properties(self):
+    @patch('data_utils.vacant_properties.google_cloud_bucket')
+    @patch('geopandas.read_file')
+    def test_ppr_properties(self, mock_gpd, mock_gcs):
         """
         Test the ppr properties layer. Simply construct the class for now to see if it works.
         """
+        mock_gdf = gpd.GeoDataFrame({
+            'ADDRESS': ['123 Main St'],
+            'OWNER1': ['John Doe'],
+            'OWNER2': ['Jane Doe'],
+            'BLDG_DESC': ['House'],
+            'CouncilDistrict': [1],
+            'ZoningBaseDistrict': ['R1'],
+            'ZipCode': ['19107'],
+            'OPA_ID': ['12345'],
+            'geometry': [Point(-75.1652, 39.9526)]
+        },  crs='EPSG:4326')
+
+        # Set up the mock chain
+        mock_blob = Mock()
+        mock_blob.exists.return_value = True
+        mock_blob.download_as_bytes.return_value = b'dummy bytes'  # The actual bytes don't matter now
+
+        mock_bucket = Mock()
+        mock_bucket.blob.return_value = mock_blob
+
+        mock_gcs.return_value = mock_bucket
+
+        # Make read_file return our mock GeoDataFrame
+        mock_gpd.return_value = mock_gdf
+
         ppr_properties(vacant_properties())
 
-    def test_vacant_properties(self):
+    @patch('data_utils.vacant_properties.google_cloud_bucket')
+    @patch('geopandas.read_file')
+    def test_vacant_properties(self, mock_gpd, mock_gcs):
         """
         Test the vacant properties layer. Simply construct the class to see if it works.
         """
+        mock_gdf = gpd.GeoDataFrame({
+            'ADDRESS': ['123 Main St'],
+            'OWNER1': ['John Doe'],
+            'OWNER2': ['Jane Doe'],
+            'BLDG_DESC': ['House'],
+            'CouncilDistrict': [1],
+            'ZoningBaseDistrict': ['R1'],
+            'ZipCode': ['19107'],
+            'OPA_ID': ['12345'],
+            'geometry': [Point(-75.1652, 39.9526)]
+        },  crs='EPSG:4326')
+
+        # Set up the mock chain
+        mock_blob = Mock()
+        mock_blob.exists.return_value = True
+        mock_blob.download_as_bytes.return_value = b'dummy bytes'  # The actual bytes don't matter now
+
+        mock_bucket = Mock()
+        mock_bucket.blob.return_value = mock_blob
+
+        mock_gcs.return_value = mock_bucket
+
+        # Make read_file return our mock GeoDataFrame
+        mock_gpd.return_value = mock_gdf
         vacant_properties()
 
 
