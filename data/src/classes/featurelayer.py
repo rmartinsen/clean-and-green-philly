@@ -401,7 +401,7 @@ class FeatureLayer:
 
         # Upload PMTiles to Google Cloud Storage
         for file in write_files:
-            blob = bucket.blob(file)
+            blob = self.bucket.blob(file)
             try:
                 blob.upload_from_filename(temp_merged_pmtiles)
                 print(f"PMTiles upload successful for {file}!")
